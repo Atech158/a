@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { Client, Databases } = require('appwrite');
+const { Client, Databases } = require('node-appwrite');
 
 const app = express();
 app.use(bodyParser.json());
