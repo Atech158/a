@@ -12,9 +12,10 @@ const client = new Client();
 const database = new Databases(client);
 
 client
-    .setEndpoint('https://YOUR-APPWRITE-ENDPOINT') // Replace with your Appwrite endpoint
-    .setProject('YOUR_PROJECT_ID')                // Replace with your Appwrite project ID
-    .setKey('YOUR_API_KEY');                      // Replace with your Appwrite API key
+    .setEndpoint('https://cloud.appwrite.io/v1') // Replace with your Appwrite endpoint
+    .setProject('677fdc5900244f39dda2')                // Replace with your Appwrite project ID
+    .setKey('standard_bbda0294c8c0c23f176adaccfb4d560825b48f2fc0d702f01537bf4760ffd3d102e1fcc820059bf9320f6ce144917a551bf295c7cef5c1bd02467f4526aa23466b968c24208891c38474d96b51fd592faaad930bfcb2b5d560eca79118c784de145247b60d3df406ba84ced0b950384cecc786ca37c903d5c98d01f7858967e5');
+
 
 const DATABASE_ID = 'YOUR_DATABASE_ID'; // Replace with your database ID
 const COLLECTION_ID = 'YOUR_COLLECTION_ID'; // Replace with your collection ID
