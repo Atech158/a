@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.1",
+    "peer": "^1.0.2",
+    "peerjs": "^1.5.4",
+    "pouchdb": "^9.0.0"
+  },
+  "name": "server",
+  "version": "22.2.0",
+  "description": "abc",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Atech158/a.git"
+  },
+  "author": "Ar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Atech158/a/issues"
+  },
+  "homepage": "https://github.com/Atech158/a#readme"
+}
