@@ -6,6 +6,11 @@ const { Client, Databases } = require('node-appwrite');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+// Add this route to handle GET requests to the root URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the Express Server');
+});
+
 
 // Appwrite Configuration
 const client = new Client();
