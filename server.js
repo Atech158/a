@@ -49,23 +49,32 @@ app.post('/check-username', async (req, res) => {
 });
 
 // Endpoint to register a Peer ID for a username
-app.post('/register-peerid', async (req, res) => {
-    const { username, peerId } = req.body;
-    if (!username || !peerId) {
-        return res.status(400).json({ error: 'Username and Peer ID are required' });
-    }
-
+app.post('/savePeer', async (req, res) => {
     try {
-        await database.createDocument(DATABASE_ID, COLLECTION_ID, 'unique()', {
-            username: username,
-            peerId: peerId
-        });
-        return res.json({ message: 'Peer ID registered successfully' });
+        console.log("Received data:", req.body);  // Debugging line
+
+        const { username, Peerid } = req.body;
+
+        // Check if Peerid is missing
+        if (!Peerid) {
+            return res.status(400).json({ error: "Missing required attribute 'Peerid'" });
+        }
+
+        const response = await databases.createDocument(
+            'DATABASE_ID',
+            'COLLECTION_ID',
+            'unique()',  // Unique ID generation
+            { username, Peerid }
+        );
+
+        res.json(response);
+
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Server error' });
+        console.error("Error saving peer ID:", error);
+        res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
