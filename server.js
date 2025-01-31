@@ -22,8 +22,8 @@ client
     .setKey('standard_6c7fe39fa1b8f69e8409e72e8dfb8a8f6035bb84941f7c928b1153cddf035b54ae58ebc07e2f04f3adfc041571bf7ddb641a055a8a4a359b7c2051640e85c5a43de6e15d13424ed6099298eb9e0e332c9dccf38c6018eb0f89b16509dd9d6e7b00d594e7f1b1574cca13ea9d9db5cec3784e1486f82b9e358661b34126034ae3');
 
 
-const DATABASE_ID = 'YOUR_DATABASE_ID'; // Replace with your database ID
-const COLLECTION_ID = 'YOUR_COLLECTION_ID'; // Replace with your collection ID
+const DATABASE_ID = '679cc0b000243bfc76f3'; // Replace with your database ID
+const COLLECTION_ID = '679cc0c4000e25b3a20a'; // Replace with your collection ID
 
 // Endpoint to check username
 app.post('/check-username', async (req, res) => {
