@@ -18,7 +18,7 @@ const database = new Databases(client);
 
 client
     .setEndpoint('https://cloud.appwrite.io/v1') // Replace with your Appwrite endpoint
-    .setProject('677fdc5900244f39dda2')                // Replace with your Appwrite project ID
+    .setProject('6677fdc5900244f39dda2')                // Replace with your Appwrite project ID
     .setKey('standard_6c7fe39fa1b8f69e8409e72e8dfb8a8f6035bb84941f7c928b1153cddf035b54ae58ebc07e2f04f3adfc041571bf7ddb641a055a8a4a359b7c2051640e85c5a43de6e15d13424ed6099298eb9e0e332c9dccf38c6018eb0f89b16509dd9d6e7b00d594e7f1b1574cca13ea9d9db5cec3784e1486f82b9e358661b34126034ae3');
 
 
