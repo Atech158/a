@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { Client, Databases, ID } = require("node-appwrite");
+const { Client, Databases, Query, ID } = require("node-appwrite");
 
 const app = express();
 app.use(express.json());
@@ -27,15 +27,29 @@ app.post("/savePeer", async (req, res) => {
             return res.status(400).json({ error: "Username and Peer ID are required" });
         }
 
-        // Store the document in the correct format
+        // **Step 1: Check if the username already exists**
+        const existingUsers = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.equal("username", username)
+        ]);
+
+        if (existingUsers.documents.length > 0) {
+            // Username exists, return the existing Peer ID
+            return res.json({
+                success: true,
+                message: "Username already exists",
+                Peerid: existingUsers.documents[0].Peerid
+            });
+        }
+
+        // **Step 2: If username does not exist, create new document**
         const response = await databases.createDocument(
             DATABASE_ID,
             COLLECTION_ID,
-            ID.unique(), // Generates a unique ID instead of using username
-            { username, Peerid } // Ensure structure matches Appwrite schema
+            ID.unique(), 
+            { username, Peerid }
         );
 
-        res.json({ success: true, data: response });
+        res.json({ success: true, message: "New user created", data: response });
     } catch (error) {
         console.error("Error saving peer ID:", error);
         res.status(500).json({ error: "Server error", details: error.message });
