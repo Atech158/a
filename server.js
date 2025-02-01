@@ -4,7 +4,12 @@ const { Client, Databases, Query, ID } = require("node-appwrite");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "ar-door-bell.infinityfreeapp.com",  // Change this to your frontend URL for better security
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 
 // Initialize Appwrite Client
 const client = new Client()
