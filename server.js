@@ -35,7 +35,7 @@ app.post("/savePeer", async (req, res) => {
         if (existingUsers.documents.length > 0) {
             // Username exists, return the existing Peer ID
             return res.json({
-                success: true,
+                success: false,
                 message: "Username already exists",
                 Peerid: existingUsers.documents[0].Peerid
             });
