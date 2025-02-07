@@ -1,51 +1,56 @@
-const express = require("express");
-const cors = require("cors");
-const { Client, Databases } = require("node-appwrite");
+const express = require('express');
+const cors = require('cors');
+const { Client, Databases } = require('node-appwrite');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 10000;
 
+app.use(express.json());
+app.use(cors());
+
+// Appwrite client setup
 const client = new Client()
-  .setEndpoint("https://cloud.appwrite.io/v1") // Change to your Appwrite endpoint
-  .setProject("YOUR_PROJECT_ID") // Your project ID
-  .setKey("YOUR_API_KEY"); // Your API Key
+    .setEndpoint('https://cloud.appwrite.io/v1') // Replace with your Appwrite endpoint
+    .setProject(process.env.APPWRITE_PROJECT_ID)
+    .setKey(process.env.APPWRITE_API_KEY);
 
 const databases = new Databases(client);
-const databaseId = "YOUR_DATABASE_ID";
-const collectionId = "YOUR_COLLECTION_ID";
+const databaseId = process.env.APPWRITE_DATABASE_ID;
+const collectionId = process.env.APPWRITE_COLLECTION_ID;
 
-app.post("/get-peerid", async (req, res) => {
-  const { username } = req.body;
+// Check if user exists or create new one
+app.post('/get-peerid', async (req, res) => {
+    const { username, peerId } = req.body;
 
-  try {
-    const response = await databases.listDocuments(databaseId, collectionId, [
-      { key: "username", value: username, operator: "equal" },
-    ]);
-
-    if (response.documents.length > 0) {
-      res.json({ peerId: response.documents[0].peerId });
-    } else {
-      res.json({ newUser: true });
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+
+    try {
+        const users = await databases.listDocuments(databaseId, collectionId, [
+            { key: 'username', value: username }
+        ]);
+
+        if (users.total > 0) {
+            return res.json({ peerId: users.documents[0].peerId });
+        }
+
+        if (!peerId) {
+            return res.status(400).json({ error: 'Peer ID required for new users' });
+        }
+
+        await databases.createDocument(databaseId, collectionId, 'unique()', {
+            username,
+            peerId
+        });
+
+        res.json({ peerId });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
-app.post("/save-peerid", async (req, res) => {
-  const { username, peerId } = req.body;
-
-  try {
-    await databases.createDocument(databaseId, collectionId, {
-      username,
-      peerId,
-    });
-
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
-
-app.listen(10000, () => console.log("Server running on port 10000"));
