@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tulips Restaurant - Customer</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #fff8f9; text-align: center; }
+    h1 { color: #c2185b; }
+    #menu button { display: block; margin: 8px auto; padding: 10px; width: 220px; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; }
+    #menu button.selected { background: lightgreen; }
+    #placeOrder { background: #c2185b; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🌸 Tulips Menu</h1>
+
+  <label for="table">Select Table:</label>
+  <input type="number" id="table" min="1" required><br><br>
+
+  <div id="menu"></div>
+  <br>
+  <button id="placeOrder">Place Order</button>
+
+  <script type="module">
+    import { Client, Databases } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.0/+esm";
+
+    // ✅ Appwrite config
+    const client = new Client()
+      .setEndpoint("https://fra.cloud.appwrite.io/v1")
+      .setProject("68bc22cd003d53ecb149");
+
+    const databases = new Databases(client);
+
+    // ✅ Replace with your DB + Collection IDs
+    const DB_ID = "68bc247f000f7ad6de7c"; 
+    const MENU_ID = "menu"; 
+    const ORDERS_ID = "orders"; 
+
+    const menuDiv = document.getElementById("menu");
+    const placeOrderBtn = document.getElementById("placeOrder");
+    const tableInput = document.getElementById("table");
+
+    let selectedItems = [];
+
+    // Load Menu from Appwrite
+    async function loadMenu() {
+      try {
+        const res = await databases.listDocuments(DB_ID, MENU_ID);
+        res.documents.forEach(item => {
+          const btn = document.createElement("button");
+          btn.innerText = `${item.name} - ₹${item.price}`;
+          btn.onclick = () => {
+            if (!selectedItems.includes(item.name)) {
+              selectedItems.push(item.name);
+              btn.classList.add("selected");
+            } else {
+              selectedItems = selectedItems.filter(i => i !== item.name);
+              btn.classList.remove("selected");
+            }
+          };
+          menuDiv.appendChild(btn);
+        });
+      } catch (err) {
+        console.error(err);
+        alert("❌ Error loading menu");
+      }
+    }
+
+    // Place Order
+    placeOrderBtn.onclick = async () => {
+      const tableNumber = parseInt(tableInput.value);
+      if (!tableNumber || selectedItems.length === 0) {
+        alert("Please select a table and at least one item!");
+        return;
+      }
+
+      try {
+        await databases.createDocument(DB_ID, ORDERS_ID, "unique()", {
+          tableNumber,
+          items: selectedItems,
+          status: "Pending"
+        });
+
+        alert("✅ Order placed!");
+        selectedItems = [];
+        menuDiv.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+      } catch (err) {
+        console.error(err);
+        alert("❌ Failed to place order");
+      }
+    };
+
+    loadMenu();
+  </script>
+</body>
+</html>
